@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 9.x                               */
-/* Created on:     19/12/2017 07:31:35 p. m.                    */
+/* Created on:     20/12/2017 02:00:35 p. m.                    */
 /*==============================================================*/
 
 
@@ -85,7 +85,7 @@ drop table users;
 /*==============================================================*/
 create table levels (
    id                   serial               not null,
-   sch_id               int4                 null,
+   school_id            int4                 null,
    nombre               varchar(100)         null,
    estado               int2                 null,
    created              date                 null,
@@ -104,7 +104,7 @@ id
 /* Index: r_nvl_esc_fk                                          */
 /*==============================================================*/
 create  index r_nvl_esc_fk on levels (
-sch_id
+school_id
 );
 
 /*==============================================================*/
@@ -112,9 +112,9 @@ sch_id
 /*==============================================================*/
 create table levels_users (
    id                   serial               not null,
-   sch_id               int4                 null,
-   sch_id2              int4                 null,
-   use_id               int4                 null,
+   user_id              int4                 null,
+   schedule_id          int4                 null,
+   school_id            int4                 null,
    estado               int2                 null,
    created              date                 null,
    modified             date                 null,
@@ -132,21 +132,21 @@ id
 /* Index: r_usn_usu_fk                                          */
 /*==============================================================*/
 create  index r_usn_usu_fk on levels_users (
-use_id
+user_id
 );
 
 /*==============================================================*/
 /* Index: r_usn_hro_fk                                          */
 /*==============================================================*/
 create  index r_usn_hro_fk on levels_users (
-sch_id
+schedule_id
 );
 
 /*==============================================================*/
 /* Index: r_usn_anl_fk                                          */
 /*==============================================================*/
 create  index r_usn_anl_fk on levels_users (
-sch_id2
+school_id
 );
 
 /*==============================================================*/
@@ -154,7 +154,7 @@ sch_id2
 /*==============================================================*/
 create table schedules (
    id                   serial               not null,
-   lev_id               int4                 null,
+   level_id             int4                 null,
    cod_exp_hro_nvl      varchar(10)          null,
    materia              varchar(50)          null,
    hora_inicio          varchar(5)           null,
@@ -176,7 +176,7 @@ id
 /* Index: r_hro_nvl_fk                                          */
 /*==============================================================*/
 create  index r_hro_nvl_fk on schedules (
-lev_id
+level_id
 );
 
 /*==============================================================*/
@@ -207,8 +207,8 @@ id
 /*==============================================================*/
 create table school_years (
    id                   serial               not null,
-   use_id               int4                 null,
-   sch_id               int4                 null,
+   school_id            int4                 null,
+   user_id              int4                 null,
    descripcion          varchar(50)          null,
    estado               int2                 null,
    created              date                 null,
@@ -227,14 +227,14 @@ id
 /* Index: r_anl_esc_fk                                          */
 /*==============================================================*/
 create  index r_anl_esc_fk on school_years (
-sch_id
+school_id
 );
 
 /*==============================================================*/
 /* Index: r_anl_usu_fk                                          */
 /*==============================================================*/
 create  index r_anl_usu_fk on school_years (
-use_id
+user_id
 );
 
 /*==============================================================*/
@@ -242,9 +242,9 @@ use_id
 /*==============================================================*/
 create table scores (
    id                   serial               not null,
-   use_id               int4                 null,
-   lev_id               int4                 null,
-   stu_id               int4                 null,
+   student_id           int4                 null,
+   level_id             int4                 null,
+   user_id              int4                 null,
    descripcion          varchar(50)          null,
    valor                varchar(10)          null,
    created              date                 null,
@@ -263,21 +263,21 @@ id
 /* Index: r_nhe_est_fk                                          */
 /*==============================================================*/
 create  index r_nhe_est_fk on scores (
-stu_id
+student_id
 );
 
 /*==============================================================*/
 /* Index: r_nhe_anl_fk                                          */
 /*==============================================================*/
 create  index r_nhe_anl_fk on scores (
-lev_id
+level_id
 );
 
 /*==============================================================*/
 /* Index: r_nhe_usu_fk                                          */
 /*==============================================================*/
 create  index r_nhe_usu_fk on scores (
-use_id
+user_id
 );
 
 /*==============================================================*/
@@ -285,8 +285,8 @@ use_id
 /*==============================================================*/
 create table students (
    id                   serial               not null,
-   use_id               int4                 null,
-   use_id2              int4                 null,
+   representante_id     int4                 null,
+   user_id              int4                 null,
    identificacion       varchar(15)          null,
    primer_nombre        varchar(50)          null,
    segundo_nombre       varchar(50)          null,
@@ -313,14 +313,14 @@ id
 /* Index: r_est_usu_representante_fk                            */
 /*==============================================================*/
 create  index r_est_usu_representante_fk on students (
-use_id2
+representante_id
 );
 
 /*==============================================================*/
 /* Index: r_est_usu_creacion_fk                                 */
 /*==============================================================*/
 create  index r_est_usu_creacion_fk on students (
-use_id
+user_id
 );
 
 /*==============================================================*/
@@ -328,8 +328,8 @@ use_id
 /*==============================================================*/
 create table student_levels (
    id                   serial               not null,
-   lev_id               int4                 null,
-   stu_id               int4                 null,
+   level_id             int4                 null,
+   student_id           int4                 null,
    estado               int2                 null,
    created              date                 null,
    modified             date                 null,
@@ -347,14 +347,14 @@ id
 /* Index: r_nve_nvl_fk                                          */
 /*==============================================================*/
 create  index r_nve_nvl_fk on student_levels (
-lev_id
+level_id
 );
 
 /*==============================================================*/
 /* Index: r_nve_est_fk                                          */
 /*==============================================================*/
 create  index r_nve_est_fk on student_levels (
-stu_id
+student_id
 );
 
 /*==============================================================*/
@@ -362,9 +362,9 @@ stu_id
 /*==============================================================*/
 create table tutors (
    id                   serial               not null,
-   lev_id               int4                 null,
-   use_id               int4                 null,
-   sch_id               int4                 null,
+   user_id              int4                 null,
+   level_id             int4                 null,
+   schoolyear_id        int4                 null,
    estado               int2                 null,
    created              date                 null,
    modified             date                 null,
@@ -382,21 +382,21 @@ id
 /* Index: r_tut_usu_fk                                          */
 /*==============================================================*/
 create  index r_tut_usu_fk on tutors (
-use_id
+user_id
 );
 
 /*==============================================================*/
 /* Index: r_tut_niv_fk                                          */
 /*==============================================================*/
 create  index r_tut_niv_fk on tutors (
-lev_id
+level_id
 );
 
 /*==============================================================*/
 /* Index: r_tut_anl_fk                                          */
 /*==============================================================*/
 create  index r_tut_anl_fk on tutors (
-sch_id
+schoolyear_id
 );
 
 /*==============================================================*/
@@ -404,7 +404,7 @@ sch_id
 /*==============================================================*/
 create table users (
    id                   serial               not null,
-   sch_id               int4                 null,
+   school_id            int4                 null,
    email                varchar(100)         null,
    identificacion       varchar(15)          null,
    primer_nombre        varchar(50)          null,
@@ -434,96 +434,96 @@ id
 /* Index: r_usu_esc_fk                                          */
 /*==============================================================*/
 create  index r_usu_esc_fk on users (
-sch_id
+school_id
 );
 
 alter table levels
-   add constraint fk_levels_r_nvl_esc_schools foreign key (sch_id)
+   add constraint fk_levels_r_nvl_esc_schools foreign key (school_id)
       references schools (id)
       on delete restrict on update restrict;
 
 alter table levels_users
-   add constraint fk_levels_u_r_usn_anl_school_y foreign key (sch_id2)
+   add constraint fk_levels_u_r_usn_anl_school_y foreign key (school_id)
       references school_years (id)
       on delete restrict on update restrict;
 
 alter table levels_users
-   add constraint fk_levels_u_r_usn_hro_schedule foreign key (sch_id)
+   add constraint fk_levels_u_r_usn_hro_schedule foreign key (schedule_id)
       references schedules (id)
       on delete restrict on update restrict;
 
 alter table levels_users
-   add constraint fk_levels_u_r_usn_usu_users foreign key (use_id)
+   add constraint fk_levels_u_r_usn_usu_users foreign key (user_id)
       references users (id)
       on delete restrict on update restrict;
 
 alter table schedules
-   add constraint fk_schedule_r_hro_nvl_levels foreign key (lev_id)
+   add constraint fk_schedule_r_hro_nvl_levels foreign key (level_id)
       references levels (id)
       on delete restrict on update restrict;
 
 alter table school_years
-   add constraint fk_school_y_r_anl_esc_schools foreign key (sch_id)
+   add constraint fk_school_y_r_anl_esc_schools foreign key (school_id)
       references schools (id)
       on delete restrict on update restrict;
 
 alter table school_years
-   add constraint fk_school_y_r_anl_usu_users foreign key (use_id)
+   add constraint fk_school_y_r_anl_usu_users foreign key (user_id)
       references users (id)
       on delete restrict on update restrict;
 
 alter table scores
-   add constraint fk_scores_r_nhe_anl_levels_u foreign key (lev_id)
+   add constraint fk_scores_r_nhe_anl_levels_u foreign key (level_id)
       references levels_users (id)
       on delete restrict on update restrict;
 
 alter table scores
-   add constraint fk_scores_r_nhe_est_students foreign key (stu_id)
+   add constraint fk_scores_r_nhe_est_students foreign key (student_id)
       references students (id)
       on delete restrict on update restrict;
 
 alter table scores
-   add constraint fk_scores_r_nhe_usu_users foreign key (use_id)
+   add constraint fk_scores_r_nhe_usu_users foreign key (user_id)
       references users (id)
       on delete restrict on update restrict;
 
 alter table students
-   add constraint fk_students_r_est_usu_users foreign key (use_id)
+   add constraint fk_students_r_est_usu_users foreign key (user_id)
       references users (id)
       on delete restrict on update restrict;
 
 alter table students
-   add constraint fk_students_r_est_usu_users2 foreign key (use_id2)
+   add constraint fk_students_r_est_usu_users1 foreign key (representante_id)
       references users (id)
       on delete restrict on update restrict;
 
 alter table student_levels
-   add constraint fk_student__r_nve_est_students foreign key (stu_id)
+   add constraint fk_student__r_nve_est_students foreign key (student_id)
       references students (id)
       on delete restrict on update restrict;
 
 alter table student_levels
-   add constraint fk_student__r_nve_nvl_levels foreign key (lev_id)
+   add constraint fk_student__r_nve_nvl_levels foreign key (level_id)
       references levels (id)
       on delete restrict on update restrict;
 
 alter table tutors
-   add constraint fk_tutors_r_tut_anl_school_y foreign key (sch_id)
+   add constraint fk_tutors_r_tut_anl_school_y foreign key (schoolyear_id)
       references school_years (id)
       on delete restrict on update restrict;
 
 alter table tutors
-   add constraint fk_tutors_r_tut_niv_levels foreign key (lev_id)
+   add constraint fk_tutors_r_tut_niv_levels foreign key (level_id)
       references levels (id)
       on delete restrict on update restrict;
 
 alter table tutors
-   add constraint fk_tutors_r_tut_usu_users foreign key (use_id)
+   add constraint fk_tutors_r_tut_usu_users foreign key (user_id)
       references users (id)
       on delete restrict on update restrict;
 
 alter table users
-   add constraint fk_users_r_usu_esc_schools foreign key (sch_id)
+   add constraint fk_users_r_usu_esc_schools foreign key (school_id)
       references schools (id)
       on delete restrict on update restrict;
 
