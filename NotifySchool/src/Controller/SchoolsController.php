@@ -25,6 +25,23 @@ class SchoolsController extends AppController
         $this->set(compact('schools'));
         $this->set('_serialize', ['schools']);
     }
+    
+    public function indexJson()
+    {
+        $schools = $this->Schools->find('all',[
+            'conditions'=> [],
+            //'limit '=>1,
+            //'offset'=>[],
+            'contain'=>['Users'],
+            //'fields '=>[],
+            //'group'=>[],
+            //'having'=>[],
+            //'join'=>[],
+            'order'=>['Schools.id'=>'ASC']
+        ]);
+        $this->set('schools',$schools);
+        $this->set('_serialize',['schools']);
+    }
 
     /**
      * View method
